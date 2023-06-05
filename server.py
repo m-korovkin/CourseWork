@@ -13,7 +13,7 @@ class HTTPServer:
         # self.blacklist = []
 
     def run_server(self):
-        print("Server is running...")
+        print(f'[{datetime.datetime.now()}] [OK] "Server is running..."')
         try:
             server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server_socket.bind((self.ip, self.port))
@@ -25,7 +25,7 @@ class HTTPServer:
                 self.serve_client(client_socket)
         except KeyboardInterrupt as exit:
             server_socket.close()
-            print("[!] Server successfully closed. Bye!")
+            print(f"[{datetime.datetime.now()}] [!] Server successfully closed. Bye!")
 
     def serve_client(self, client_socket):
         data = client_socket.recv(1024).decode('utf-8')
@@ -107,8 +107,7 @@ class HTTPServer:
             status, reason = '200', 'OK'
             headers = [('Content-Type', content_type), ('Content-Length', len(body))]
         except Exception as err:
-            raise err
-            print(err)
+            print(f'[{datetime.datetime.now()}] [ERROR] [{err}]')
             body = 'Sorry, bro! No page...'.encode('utf-8')
             content_type = 'text/html; charset=uft-8'
             status, reason = '404', 'Not Found'

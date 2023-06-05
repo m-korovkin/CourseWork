@@ -11,7 +11,7 @@ def tripGetAll():
 	returnList = []
 	for el in tripList:
 		id_, cityFrom, cityTo, date, time, price, free_places, busNumber, stationNumber = el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8]
-		print(id_, cityFrom, cityTo, date, time, price, free_places, busNumber, stationNumber)
+		# print(id_, cityFrom, cityTo, date, time, price, free_places, busNumber, stationNumber)
 		returnList.append(Trip(id_, cityFrom, cityTo, date, time, price, free_places, busNumber, stationNumber))
 	if len(returnList) == 0:
 		returnList = config.tripList
@@ -48,8 +48,8 @@ def tripAppend1():
 		with cur:
 			cur.executemany(sql, data)
 		data = []
-	for el in data:
-		print(el)
+	#for el in data:
+		#print(el)
 	
 
 def getPlacesByID(id_):
@@ -63,8 +63,8 @@ def getPlacesByID(id_):
 	except Exception as e:
 		print(f'[{datetime.datetime.now()}] [ERROR] [{e}]')
 		returnList = [el.free_places for el in config.tripList if el.id == id_]
-		for row in returnList:
-			print(row)
+		#for row in returnList:
+			#print(row)
 		return returnList
 
 		#for el in config.tripList:
@@ -93,8 +93,8 @@ def databaseTest():
 
 	with con:
 		content = con.execute("SELECT * FROM USER WHERE age <= 22")
-		for row in content:
-			print(row)
+		#for row in content:
+			#print(row)
 
 
 if __name__ == "__main__":

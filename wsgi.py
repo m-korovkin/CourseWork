@@ -100,12 +100,12 @@ def handleGetTickets(request):
     query = [i.split('=') for i in request.query.split('&')]
 
     data = db.tripGetAll() # Запрос на все записи и сравнение внутри WSGI. ##### TODO: Изменить запрос
-    print(f"data collected. len(data) = {len(data)}")
+    print(f"[{datetime.datetime.now()}] [OK] Len(data) = {len(data)}")
     if not data:
         data = tripList
-        for el in data:
-            print(el.date)
-        print(el)
+        #for el in data:
+            #print(el.date)
+        #print(el)
     route, date, quantity = query[0][1], query[1][1], query[2][1]
     cityA, cityB = '', ''
     for city in citiesScheme:
@@ -185,11 +185,21 @@ def handleReturnTicket(request):
     #TODO Удаление брони билета в бд
     content_type = 'text/html; charset=uft-8'
     try:
-        with open(f'{directoryName}{mainPageName}', 'rb') as file:
-            body = file.read()
-        status, reason = '202', 'Created'
+        data = db.tripGetAll()
+        body = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Фирма</title><link rel="stylesheet" href="style.css"></head><body><div class="main"><div class="header_div"><nav class="one"><ul><li><a href="admin_login.html"><i class="fa fa-home fa-fw"></i>Панель администратора</a></li><li><a href="map.html">Мы на картах</a></li><li><a href="about.html">О нас</a></li><li><a href="return.html">Вернуть билет</a></li></ul></nav></div><form action="getTicketsList" method="get"><div class="second"><div class="route"><div><div class="where_wrapper"><div class="where_block"><label class="where_label">Выберите маршрут:</label><div class="block_box"><select tabindex="1" class="box" name="route"> <option value="mn" selected>Москва - Нижний Новгород</option><option value="mp">Москва - Санкт-Петербург</option><option value="nm">Нижний Новгород - Москва</option><option value="mp">Нижний Новгород - Санкт-Петербург</option><option value="pm">Санкт-Петербург - Москва</option><option value="pn">Санкт-Петербург - Нижний Новгород</option></select></div></div></div></div></div><div class="data"><div class="data2"><form><p class="calendar_p">Выберите дату:<input tabindex="2" class="calendar" type="date" name="calendar" value="01-06-2023" max="05-06-2023" min="05-05-2023"></p></form></div></div><div class="passengers"><div class="passengers_2"><label class="passengers_label">Пассажиры:</label><div class="pass_block"><select tabindex="3" class="pass" name="quantity"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div></div></div><div class="find"><button class="find_button" role="button" type="submit"><span>Найти билет</span></button></div></div></form></div>'
+        for trip in data:
+            body += f'<br><div class="ticket"><div class="tick"><div class="ticket_noprice"><div class="trip"><label class="trip_label">{trip.cityFrom} - {trip.cityTo}</label></div><div class="inf"><label class="bus_num">Автобус номер {trip.busNumber}</label><label class="station_num">Вокзал номер {trip.stationNumber}</label></div></div><div class="sep"></div><div class="ticket_price"><div class="price"><label class="label_price">{trip.price}</label></div><div class="ticket_date"><label>{trip.date}</label></div></div><div class="sep"></div><div class="block_btn"><form method="post" action="choosePlace"><input type="text" name="choosePlace" value="{trip.id}" hidden><button value="{trip.id}" class="choose_btn" role="button" type="submit"><span>Выбрать билет</span></button></form></div></div></div>'
+        body += '<div class="map"><span><a class="custom-btn btn-2" href="map.html">Карта предприятий</a></span></div></body></html>'
+        body = body.encode('utf-8')
+        
+        contentType = 'text/html; charset=utf-8'
+        headers = [('Content-Type', contentType),
+                   ('Content-Length', len(body))]
+        status, reason = '202', 'Accepted'
+        print(f'[{datetime.datetime.now()}] "{status} {reason}"')
+        return Response(status, reason, headers, body)
     except Exception as e:
-        print(e)
+        print(f'[{datetime.datetime.now()}] [ERROR] [{e}]')
         body = 'Sorry, bro! No page...'.encode('utf-8')
         status, reason = '404', 'Not Found'
     headers = [('Content-Type', content_type), ('Content-Length', len(body))]
@@ -207,7 +217,7 @@ def handleCreateTicket(request):
         body = f'{e}'
         body = body.encode('utf-8')
     content_type = 'text/html; charset=uft-8'
-    status, reason = '202', 'Created'
+    status, reason = '201', 'Created'
     headers = [('Content-Type', content_type), ('Content-Length', len(body))]
     print(f'[{datetime.datetime.now()}] "{status} {reason}"')
     return Response(status, reason, headers, body)
