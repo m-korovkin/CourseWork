@@ -27,3 +27,19 @@ class Response:
         self.reason = reason
         self.headers = headers
         self.body = body
+
+
+class Human:
+	def __init__(self, id, fio, passport, phone):
+		self.id = id
+		self.fio = fio
+		self.passport = passport
+		self.phone = phone
+
+
+class Ticket:
+	def __init__(self, id, place, routeID, humanID):
+		self.id = id
+		self.place = place
+		self.routeID = routeID
+		self.humanID = humanID

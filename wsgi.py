@@ -8,7 +8,7 @@ from config import *
 
 def handleGetAllTickets(request):
     # data = list of objects "Trip"
-    data = db.tripGetAll()
+    data = db.getAllTrips()
     body = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Фирма</title><link rel="stylesheet" href="style.css"></head><body><div class="main"><div class="header_div"><nav class="one"><ul><li><a href="admin_login.html"><i class="fa fa-home fa-fw"></i>Панель администратора</a></li><li><a href="map.html">Мы на картах</a></li><li><a href="about.html">О нас</a></li><li><a href="return.html">Вернуть билет</a></li></ul></nav></div><form action="getTicketsList" method="get"><div class="second"><div class="route"><div><div class="where_wrapper"><div class="where_block"><label class="where_label">Выберите маршрут:</label><div class="block_box"><select tabindex="1" class="box" name="route"> <option value="mn" selected>Москва - Нижний Новгород</option><option value="mp">Москва - Санкт-Петербург</option><option value="nm">Нижний Новгород - Москва</option><option value="mp">Нижний Новгород - Санкт-Петербург</option><option value="pm">Санкт-Петербург - Москва</option><option value="pn">Санкт-Петербург - Нижний Новгород</option></select></div></div></div></div></div><div class="data"><div class="data2"><form><p class="calendar_p">Выберите дату:<input tabindex="2" class="calendar" type="date" name="calendar" value="01-06-2023" max="05-06-2023" min="05-05-2023"></p></form></div></div><div class="passengers"><div class="passengers_2"><label class="passengers_label">Пассажиры:</label><div class="pass_block"><select tabindex="3" class="pass" name="quantity"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div></div></div><div class="find"><button class="find_button" role="button" type="submit"><span>Найти билет</span></button></div></div></form></div>'
     for trip in data:
         body += f'<br><div class="ticket"><div class="tick"><div class="ticket_noprice"><div class="trip"><label class="trip_label">{trip.cityFrom} - {trip.cityTo}</label></div><div class="inf"><label class="bus_num">Автобус номер {trip.busNumber}</label><label class="station_num">Вокзал номер {trip.stationNumber}</label></div></div><div class="sep"></div><div class="ticket_price"><div class="price"><label class="label_price">{trip.price}</label></div><div class="ticket_date"><label>{trip.date}</label></div></div><div class="sep"></div><div class="block_btn"><form method="post" action="choosePlace"><input type="text" name="choosePlace" value="{trip.id}" hidden><button value="{trip.id}" class="choose_btn" role="button" type="submit"><span>Выбрать билет</span></button></form></div></div></div>'
@@ -24,7 +24,7 @@ def handleGetAllTickets(request):
 
 
 def handleGetAllTicketsAdmin(request):
-    data = db.tripGetAll()
+    data = db.getAllTrips()
     body = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Фирма</title><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="tickets.css"></head><body><form action="enterAdminPanel" method="post"><p><a><input name="password" type="password" value="111" hidden/><input name="name" value="111" type="text" hidden/><button type="submit">Назад</button></a></p></form><h1>Проданные билеты</h1>'
     for trip in data:
         body += f'<br><div class="ticket"><div class="tick"><div class="ticket_noprice"><div class="trip"><label class="trip_label">{trip.cityFrom} - {trip.cityTo}</label></div><div class="inf"><label class="bus_num">Автобус номер {trip.busNumber}</label><label class="station_num">Вокзал номер {trip.stationNumber}</label></div></div><div class="sep"></div><div class="ticket_price"><div class="price"><label class="label_price">{trip.price}</label></div><div class="ticket_date"><label>{trip.date}</label></div></div><div class="sep"></div><div class="block_btn"><form method="post" action="choosePlace"><input type="text" name="choosePlace" value="{trip.id}" hidden></div></div></div>'
@@ -40,7 +40,7 @@ def handleGetAllTicketsAdmin(request):
 def handleGetAllPlaces(request):
     trip_id = request.body.split('=')[1]
     # print(trip_id)
-    freePlaces = db.getPlacesByID(trip_id)
+    freePlaces = db.selectPlacesByID(trip_id)
     body = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Title</title><link rel="stylesheet" href="placesBus.css"></head><body><div class="seatmap"><div class="seatmap_title"><span>Выберите место на схеме автобуса</span></div><div class="free_or_not"><div class="free"><span class="span_free"></span> - Свободное</div><div class="not_free"><span class="span_not_free"></span> - Занятое </div></div><div class="tir"><div class="tir_2"><div class="tir_3"><div class="tir_4"><div class="first_row">'
     var = 0
     for cipher in freePlaces[0]:
@@ -148,6 +148,9 @@ def afterShowTicket(request):
     Покупка билета
     """
     #TODO Создание записи в бд
+    listOfHumans = [Human(123, "human_name", "human_email", "human_phone")]
+    db.insertIntoTableHuman(listOfHumans)
+    db.updateFreePlaces(trip_id, trip_place)
     body = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Фирма</title><link rel="stylesheet" href="style.css"></head><body>'
     body += f'<div>Ваш билет номер {random.random() * 100000000000000000}</div><div><form action="backToMain" method="post"><button type="submit">Главная</button></form></div>'
     body += '</body></html>'
@@ -162,7 +165,7 @@ def afterShowTicket(request):
 
 
 def handleBuyTicket(request):
-    data = db.tripGetAll()
+    data = db.getAllTrips()
     body = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Фирма</title><link rel="stylesheet" href="style.css"></head><body><div class="main"><div class="header_div"><nav class="one"><ul><li><a href="admin_login.html"><i class="fa fa-home fa-fw"></i>Панель администратора</a></li><li><a href="map.html">Мы на картах</a></li><li><a href="about.html">О нас</a></li><li><a href="return.html">Вернуть билет</a></li></ul></nav></div><form action="getTicketsList" method="get"><div class="second"><div class="route"><div><div class="where_wrapper"><div class="where_block"><label class="where_label">Выберите маршрут:</label><div class="block_box"><select tabindex="1" class="box" name="route"> <option value="mn" selected>Москва - Нижний Новгород</option><option value="mp">Москва - Санкт-Петербург</option><option value="nm">Нижний Новгород - Москва</option><option value="mp">Нижний Новгород - Санкт-Петербург</option><option value="pm">Санкт-Петербург - Москва</option><option value="pn">Санкт-Петербург - Нижний Новгород</option></select></div></div></div></div></div><div class="data"><div class="data2"><form><p class="calendar_p">Выберите дату:<input tabindex="2" class="calendar" type="date" name="calendar" value="01-06-2023" max="05-06-2023" min="05-05-2023"></p></form></div></div><div class="passengers"><div class="passengers_2"><label class="passengers_label">Пассажиры:</label><div class="pass_block"><select tabindex="3" class="pass" name="quantity"><option value="1" selected>1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option></select></div></div></div><div class="find"><button class="find_button" role="button" type="submit"><span>Найти билет</span></button></div></div></form></div>'
     for trip in data:
         body += f'<br><div class="ticket"><div class="tick"><div class="ticket_noprice"><div class="trip"><label class="trip_label">{trip.cityFrom} - {trip.cityTo}</label></div><div class="inf"><label class="bus_num">Автобус номер {trip.busNumber}</label><label class="station_num">Вокзал номер {trip.stationNumber}</label></div></div><div class="sep"></div><div class="ticket_price"><div class="price"><label class="label_price">{trip.price}</label></div><div class="ticket_date"><label>{trip.date}</label></div></div><div class="sep"></div><div class="block_btn"><form method="post" action="choosePlace"><input type="text" name="choosePlace" value="{trip.id}" hidden><button value="{trip.id}" class="choose_btn" role="button" type="submit"><span>Выбрать билет</span></button></form></div></div></div>'
@@ -175,7 +178,6 @@ def handleBuyTicket(request):
     status, reason = '200', 'OK'
     print(f'[{datetime.datetime.now()}] "{status} {reason}"')
     return Response(status, reason, headers, body)
-    return Response()
 
 
 def handleReturnTicket(request):
@@ -209,13 +211,22 @@ def handleReturnTicket(request):
 
 def handleCreateTicket(request):
     dataList = [i.split('=') for i in request.body.split('&')]
-    newTrip = Trip(111, dataList[0][1], dataList[1][1], dataList[2][1], dataList[3][1], dataList[4][1], '00000000000000000000', dataList[5][1], dataList[6][1])
-    try:
-        with open(f'{directoryName}/admin_added.html', 'rb') as page:
-            body = page.read()
-    except Exception as e:
-        body = f'{e}'
-        body = body.encode('utf-8')
+    cityFrom, cityTo = dataList[0][1], dataList[1][1]
+    for city in citiesScheme:
+        if cityFrom == city[0]:
+            cityFrom = city[1]
+        elif cityTo == city[0]:
+            cityTo = city[1]
+    newTrip = Trip(111, cityFrom, cityTo, dataList[2][1], dataList[3][1], dataList[4][1], '00000000000000000000', dataList[5][1], dataList[6][1])
+    if db.insertIntoTableRoute([newTrip]):
+        try:
+            with open(f'{directoryName}/admin_added.html', 'rb') as page:
+                body = page.read()
+        except Exception as e:
+            body = f'{e}'
+            body = body.encode('utf-8')
+    else:
+        body = 'Sorry, bro! No page...'.encode('utf-8')
     content_type = 'text/html; charset=uft-8'
     status, reason = '201', 'Created'
     headers = [('Content-Type', content_type), ('Content-Length', len(body))]

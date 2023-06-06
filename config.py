@@ -1,19 +1,42 @@
 from models import Trip
 
 
+# Данные для подключения к MySQL
+class UserDB:
+	def __init__(self, hostname, username, password, database):
+		self.hostname = hostname
+		self.username = username
+		self.password = password
+		self.database = database
+pyConDB = UserDB('localhost', 'python', 'python3141', 'trip')
+
+# host_name = 'localhost'
+# user_name = 'python_server'
+# password_python = 'QWErty123%%123_123'
+# database_name = 'http_server_users'
+
+##########################################################################################
+
 admName = '111' # Юзернейм админа
 admPass = '111' # Пароль админа
+
+##########################################################################################
 
 directoryName = 'Source' # Имя каталога для фронтенда
 mainPageName = 'index.html' # Имя стартовой страницы
 
-# Данные для подключения к MySQL
-host_name = 'localhost'
-user_name = 'python_server'
-password_python = 'QWErty123%%123_123'
-database_name = 'http_server_users'
-
-citiesScheme = [['m', 'Москва'], ['n', 'Нижний Новгород'], ['s', 'Санкт-Петербург']]
+citiesScheme = [
+['m', 'Москва'],
+['n', 'Нижний Новгород'],
+['s', 'Санкт-Петербург'],
+['z', 'Казань'],
+['o', 'Кострома'],
+['r', 'Ярославль'],
+['i', 'Иваново'],
+['v', 'Воронеж'],
+['e', 'Екатеринбург'],
+['u', 'Муром']
+]
 
 # Временная БД
 tripList = [

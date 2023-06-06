@@ -1,108 +1,250 @@
 import datetime
+
 import sqlite3 as db
-from models import Trip
+import mysql.connector
+
+from models import Trip, Human, Ticket
 import config
 
 
-def tripGetAll():
-	con = db.connect('my.db')
-	cur = con.cursor()
-	tripList = [[part for part in el] for el in cur.execute('SELECT * FROM trip')]
-	returnList = []
-	for el in tripList:
-		id_, cityFrom, cityTo, date, time, price, free_places, busNumber, stationNumber = el[0], el[1], el[2], el[3], el[4], el[5], el[6], el[7], el[8]
-		# print(id_, cityFrom, cityTo, date, time, price, free_places, busNumber, stationNumber)
-		returnList.append(Trip(id_, cityFrom, cityTo, date, time, price, free_places, busNumber, stationNumber))
-	if len(returnList) == 0:
-		returnList = config.tripList
+def connectToDB():
+	"""
+	Подключение к СУБД MySQL. Используется во всех остальных функциях.
+	"""
+	mydb = mysql.connector.connect(
+		host = config.pyConDB.hostname,
+		user = config.pyConDB.username,
+		password = config.pyConDB.password,
+		database = config.pyConDB.database
+	)
+	# print(f'[{datetime.datetime.now()}] [{mydb}]')
+	# print(f'[{datetime.datetime.now()}] [Connection to the database has been successfully completed!]')
+	return mydb
+
+
+
+def dropTable(tbName):
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	sql = f"DROP TABLE {tbName}"
+	mycursor.execute(sql)
+
+
+def deleteValuesFromTheTable(databaseName):
+	"""
+	Функция очищает таблицу, переданную в качестве аргумента.
+	"""
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	sql = f'DELETE FROM {databaseName}'
+	mycursor.execute(sql)
+
+	mydb.commit()
+	#print(mycursor.rowcount, "record(s) deleted")
+
+
+def createDatabase():
+	"""
+	Создание базы данных. Служебная функция, должна использоваться однократно.
+	"""
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	mycursor.execute("CREATE DATABASE IF NOT EXISTS trip")
+
+
+def createTableForRoutes():
+	"""
+	Создание таблицы 'route'. Служебная функция, должна использоваться однократно.
+	"""
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	mycursor.execute("CREATE TABLE IF NOT EXISTS route(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, city_from VARCHAR(255), city_to VARCHAR(255), date_ VARCHAR(255), time_ VARCHAR(255), price VARCHAR(255), free_places VARCHAR(21), bus_number VARCHAR(255), station_number VARCHAR(255))")
+	mycursor.execute("SHOW TABLES")
+
+	#for table in mycursor:
+		#print(table)
+
+
+def createTableForPeople():
+	"""
+	Создание таблицы 'human'. Служебная функция, должна использоваться однократно.
+	"""
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	mycursor.execute("CREATE TABLE IF NOT EXISTS human(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, humanFIO VARCHAR(255), humanPassPort VARCHAR(63), humanPhone VARCHAR(63))")
+	mycursor.execute("SHOW TABLES")
+
+	#for table in mycursor:
+		#print(table)
+
+
+def createTableForTickets():
+	"""
+	Создание таблицы 'ticket'. Служебная функция, должна использоваться однократно.
+	"""
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	mycursor.execute("CREATE TABLE IF NOT EXISTS ticket(id INT NOT NULL AUTO_INCREMENT PRIMARY KEY, ticketNumber VARCHAR(63), routeID INT, humanID INT, FOREIGN KEY (routeID) REFERENCES route (id), FOREIGN KEY (humanID) REFERENCES human (id) )")
+	mycursor.execute("SHOW TABLES")
+
+	#for table in mycursor:
+		#print(table)
+
+
+def insertIntoTableTickets(listOfRecords):
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	sql = 'INSERT INTO ticket (ticketNumber, routeID, humanID) VALUES (%s, %s, %s)'
+	val = [[el.place, el.routeID, el.humanID] for el in listOfRecords]
+	mycursor.executemany(sql, val)
+	mydb.commit()
+	#print(mycursor.rowcount, "was inserted")	
+
+
+def insertIntoTableHuman(listOfRecords):
+	"""
+	Функция заполняет таблицу 'human' объектами класса 'Human'. В качестве аргумента принимает список бъектов.
+	"""
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	sql = 'INSERT INTO human (humanFIO, humanPassPort, humanPhone) VALUES (%s, %s, %s)'
+	val = [[el.fio, el.passport, el.phone] for el in listOfRecords]
+	#for el in val:
+		#print(el)
+	mycursor.executemany(sql, val)
+	mydb.commit()
+	#print(mycursor.rowcount, "was inserted")
+
+
+def insertIntoTableRoute(listOfRecords):
+	"""
+	Функция заполняет таблицу 'route' объектами класса 'Trip'. В качестве аргумента принимает список бъектов.
+	"""
+	try:
+		mydb = connectToDB()
+		mycursor = mydb.cursor()
+		sql = 'INSERT INTO route (city_from, city_to, date_, time_, price, free_places, bus_number, station_number) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+		val = [(el.cityFrom, el.cityTo, el.date, el.time, el.price, el.free_places, el.busNumber, el.stationNumber) for el in listOfRecords]
+		mycursor.executemany(sql, val)
+		mydb.commit()
+		#print(mycursor.rowcount, "was inserted")
+		return True
+	except Exception as err:
+		print(f'[{datetime.datetime.now()}] [ERROR] [{err}]')
+		return False
+
+
+def selectAllFromDB(dbName):
+	"""
+	Функция принимает название таблицы и возвращает список строк данной таблицы.
+	"""
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	mycursor.execute(f"SELECT * FROM {dbName}")
+	myresult = mycursor.fetchall()
+	return myresult
+
+
+def selectPlacesByID(id):
+	"""
+	Функция принимает id объекта класса 'Trip', возвращает значение параметра 'free_places'.
+	"""
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	mycursor.execute(f"SELECT free_places FROM route where id={id}")
+	myresult = mycursor.fetchall()
+	returnList = [[el for el in x] for x in myresult]
+	return returnList[0]
+
+###################
+
+def updateFreePlaces(tripID, place):
+	exitString = ''
+	current_freePlaces = selectPlacesByID(tripID)[0]
+	#print(type(current_freePlaces))
+	for i in range(20):
+		#print(f"{i+1} and {place}")
+		if int(i+1) == int(place):
+			exitString += "1"
+		else:
+			exitString += current_freePlaces[i]
+	#print(f'{exitString} : {current_freePlaces}')
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	sql = "UPDATE route SET free_places = %s WHERE id = %s"
+	val = (exitString, tripID)
+	mycursor.execute(sql, val)
+	mydb.commit()
+	#print(mycursor.rowcount, "record(s) affected")
+
+
+def varFunc():
+	mydb = connectToDB()
+	mycursor = mydb.cursor()
+	sql = 'set foreign_key_checks=0;'
+	mycursor.execute(sql)
+
+
+def getAllTrips():
+	"""
+	Вспомогательная функция, помогает превратить результат работы функции 'selectAllFromDB' из кортежа в список объектов класса 'Trip'.
+	"""
+	dbName = 'route'
+	data = selectAllFromDB(dbName)
+	returnList = [Trip(x[0],x[1],x[2],x[3],x[4],x[5],x[6],x[7],x[8]) for x in [[el for el in x] for x in data]]
 	return returnList
 
-
-def tripCreate():
-	con = db.connect('my.db')
-	cur = con.cursor()
-	query = "CREATE TABLE IF NOT EXISTS trip(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, city_from TEXT, city_to TEXT, date_ TEXT, time_ TEXT, price TEXT, free_places TEXT, bus_number TEXT, station_number TEXT);"
-	cur.execute(query)
-	print('[OK] Table "trip" successfully created!')
-
-
-def tripAppend(tripList):
-	dbName = 'my.db'
-	con = db.connect(dbName)
-	cur = con.cursor()
-	data = [(el.id, el.cityFrom, el.cityTo, el.date, el.time, el.price, el.free_places, el.busNumber, el.stationNumber) for el in tripList]
-	cur.executemany("INSERT INTO trip VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)", data)
-	res = cur.execute("SELECT * FROM trip")
-	res.fetchall()
-
-
-def tripAppend1():
-	dbName = 'my.db'
-	
-	con = db.connect(dbName)
-	cur = con.cursor()
-	sql = 'INSERT INTO trip (id, city_from, city_to, date_, time_, price, free_places, bus_number, station_number) values(?, ?, ?, ?, ?, ?, ?, ?)'
-	data = []
-	for row in range(len(tripList)):
-		data.append((tripList[row].cityFrom, tripList[row].cityTo, tripList[row].date, tripList[row].time, tripList[row].price, tripList[row].free_places, tripList[row].busNumber, tripList[row].stationNumber))
-		with cur:
-			cur.executemany(sql, data)
-		data = []
-	#for el in data:
-		#print(el)
-	
-
-def getPlacesByID(id_):
-	try:
-		dbName = 'my.db'
-		con = db.connect(dbName)
-		cur = con.cursor()
-		sql = f'SELECT * FROM trip WHERE id_={id_}'
-		res = cur.execute(sql)
-		return res
-	except Exception as e:
-		print(f'[{datetime.datetime.now()}] [ERROR] [{e}]')
-		returnList = [el.free_places for el in config.tripList if el.id == id_]
-		#for row in returnList:
-			#print(row)
-		return returnList
-
-		#for el in config.tripList:
-			#if el.id == id_
-
-
-def databaseTest():
-	con = db.connect('my.db')
-	with con:
-		con.execute("""
-			CREATE TABLE USER (
-				id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-				name TEXT,
-				age INTEGER
-			);
-		""")
-
-	sql = 'INSERT INTO USER (id, name, age) values(?, ?, ?)'
-	data = [
-		(1, 'Alice', 21),
-		(2, 'Bob', 22),
-		(3, 'Chris', 23)
-	]
-	with con:
-		con.executemany(sql, data)
-
-	with con:
-		content = con.execute("SELECT * FROM USER WHERE age <= 22")
-		#for row in content:
-			#print(row)
+###################
 
 
 if __name__ == "__main__":
-	tripCreate()
-	tripAppend(config.tripList)
-	data = tripGetAll()
-	for el in data:
-		print(el.id, el.price, el.cityFrom, el.cityTo)
+	#varFunc()
+	#print(1)
+	#deleteValuesFromTheTable('ticket')
+	#deleteValuesFromTheTable('human')
+	dropTable('ticket')
+	#dropTable('human')
+	#dropTable('route')
+	#print(2)
+	# someData = [Ticket(1, 2, 1, 1), Ticket(2, 18, 31, 2)]
+	# insertIntoTableTickets(someData)
+
+
+	# connectToDB()
+	# createDatabase()
+	# insertIntoTableRoute(config.tripList)
+	# data = selectAllFromDB('route')
+	# for el in data:
+	#	print(el)
+	# getAllTrips()
+	# selectPlacesByID(15)
+	#print(3)
+	#print(4)
+	createTableForRoutes()
+	createTableForPeople()
+	createTableForTickets()
+	#list_of_people = [Human(1, 'Корняков Сергей Геннадьевич', '2222 638148', '89991115522'), Human(2, 'Путин Владимир Владимирович', '1122 389182', '89040422322')]
+	#insertIntoTableHuman(list_of_people)
+	#print(5)
+	#result = selectAllFromDB('route')
+	#for el in result:
+		#print(el)
+	#result = selectAllFromDB('ticket')
+	#for el in result:
+		#print(el)
+	#result = selectAllFromDB('human')
+	#for el in result:
+		#print(el)
+	#print(6)
+
+	#tripCreate()
+	#tripAppend(config.tripList)
+	#data = tripGetAll()
+	#for el in data:
+	#	print(el.id, el.price, el.cityFrom, el.cityTo)
 	# print('OK')
 	# print('OK')
+
+	# val = [(el.cityFrom, el.cityTo, el.date, el.time, el.price, el.free_places, el.busNumber, el.stationNumber) for el in listOfRecords]
+	
 	
