@@ -82,7 +82,7 @@ def handleLoginAdmin(request):
     if name == admName and passw == admPass:
         print(f'[{datetime.datetime.now()}] [!] Authentication has been successfully completed!')
         status, reason = '200', 'OK'
-        body = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Фирма</title><link rel="stylesheet" href="style.css"></head><body><h1>ADMIN PANEL</h1><div class="main"><div class="header_div"><nav class="one"><ul><li><a href="tickets.html"><i class="fa fa-home fa-fw"></i>Все билеты</a></li><li><a href="admin.html">Добавить билет</a></li><li><a href="index.html">Главная</a></li></ul></nav></div></body></html>'
+        body = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Фирма</title><link rel="stylesheet" href="style.css"></head><body><h1>ADMIN PANEL</h1><div class="main"><div class="header_div"><nav class="one"><ul><li><a href="tickets.html"><i class="fa fa-home fa-fw"></i>Все билеты</a></li><li><a href="admin.html">Добавить билет</a></li><li><a href="index.html">Главная</a></li><li><a href="stats.html">Страница статистики</a></li></ul></nav></div><form action="adminTools" method="post"><button name="clearTable" value="ticket">DELETE * FROM ticket</button><button name="clearTable" value="human">DELETE * FROM human</button><button name="clearTable" value="route">DELETE * FROM route</button></form></body></html>'
         body = body.encode('utf-8')
     else:
         status, reason = '401', 'Unauthorized'

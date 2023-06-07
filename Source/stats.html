@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Статистика</title>
+    <link rel="stylesheet" href="stats.css">
+</head>
+<body>
+<h1>Отчет</h1>
+<div class="stats">
+    <div class="stats_date">
+        <h1>Выберите период и маршрут</h1>
+        <form class="dates_left">
+           <input class="calen" type="date" name="calendar" value="2012-06-01"
+            max="2012-06-04" min="2012-05-29">
+        </form>
+        <form class="dates_right">
+           <input class="calen" type="date" name="calendar" value="2012-06-01"
+            max="2012-06-04" min="2012-05-29">
+        </form>
+        <form method="get" class="red_square">
+            <button class="red_place">2</button>
+        </form>
+        <select tabindex="1" class="box" name="route">
+                                        <option value="mn" selected>Москва - Нижний Новгород</option>
+                                        <option value="mp">Москва - Санкт-Петербург</option>
+                                        <option value="mi">Москва - Иваново</option>
+                                        <option value="mv">Москва - Воронеж</option>
+                                        <option value="mk">Москва - Кострома</option>
+
+                                        <option value="nm">Нижний Новгород - Москва</option>
+                                        <option value="mp">Нижний Новгород - Санкт-Петербург</option>
+                                        <option value="ni">Нижний Новгород - Иваново</option>
+                                        <option value="nv">Нижний Новгород - Воронеж</option>
+                                        <option value="nk">Нижний Новгород - Кострома</option>
+
+                                        <option value="pm">Санкт-Петербург - Москва</option>
+                                        <option value="pn">Санкт-Петербург - Нижний Новгород</option>
+                                        <option value="pi">Санкт-Петербург - Иваново</option>
+                                        <option value="pv">Санкт-Петербург - Воронеж</option>
+                                        <option value="pk">Санкт-Петербург - Кострома</option>
+
+                                        <option value="im">Иваново - Москва</option>
+                                        <option value="ip">Иваново - Санкт-Петербург</option>
+                                        <option value="in">Иваново - Нижний Новгород</option>
+                                        <option value="iv">Иваново - Воронеж</option>
+                                        <option value="ik">Иваново - Кострома</option>
+
+                                        <option value="vm">Воронеж - Москва</option>
+                                        <option value="vp">Воронеж - Санкт-Петербург</option>
+                                        <option value="vn">Воронеж - Нижний Новгород</option>
+                                        <option value="vi">Воронеж - Иваново</option>
+                                        <option value="vk">Воронеж - Кострома</option>
+
+                                        <option value="km">Кострома - Москва</option>
+                                        <option value="kp">Кострома - Санкт-Петербург</option>
+                                        <option value="kn">Кострома - Нижний Новгород</option>
+                                        <option value="ki">Кострома - Иваново</option>
+                                        <option value="kv">Кострома - Воронеж</option>
+        </select>
+        <p>Заработано:</p>
+    </div>
+    <p>Самый продаваемый маршрут:</p>
+    <p>Денег заработано со всех маршрутов:</p>
+</div>
+</body>
+</html>

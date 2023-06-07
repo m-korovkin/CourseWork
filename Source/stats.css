@@ -1,0 +1,241 @@
+h1{
+    font-size: 30px;
+    color: red;
+    text-align: center;
+}
+
+.main_admin_block{
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 1;
+    margin: auto;
+    width: 550px;
+    height: 810px;
+    border: 1px solid black;
+}
+
+.admin_label{
+    margin: auto;
+    font-size: 20px;
+
+    transform: translateY(10px);
+    position: absolute;
+    left: 12px;
+    z-index: 1;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0s;
+    transition-property: all;
+}
+
+
+.admin_label_1{
+    margin: auto;
+
+    font-size: 20px;
+    transform: translateY(10px);
+    position: absolute;
+    left: 12px;
+    z-index: 1;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    transition-duration: 0.15s;
+    transition-timing-function: ease-in-out;
+    transition-delay: 0s;
+    transition-property: all;
+}
+
+
+.admin_block{
+    width: 150px;
+    height: 60px;
+    padding-left: 12px;
+    padding-top: 15px;
+
+
+}
+
+.cities{
+    width: 200px;
+    height: 25px;
+    font-size: 15px;
+    color: black;
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 4px 4px #ccc;
+
+}
+
+
+.calendar_block{
+    padding-left: 150px;
+
+    width: 150px;
+    height: 50px;
+
+
+}
+
+.calendar{
+    font-size: 20px;
+    color: black;
+
+}
+
+.time{
+    width: 100px;
+    height: 25px;
+    font-size: 15px;
+    color: black;
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 4px 4px #ccc;
+}
+
+.money{
+    width: 150px;
+    height: 25px;
+    font-size: 15px;
+    color: black;
+    background-color: #eee;
+    border-radius: 5px;
+    box-shadow: 4px 4px #ccc;
+}
+
+.send{
+    margin: auto;
+    width: 150px;
+    height: 40px;
+
+}
+
+.add{
+    font-size: 15px;
+    color: #fff; /* цвет текста */
+    text-decoration: none; /* убирать подчёркивание у ссылок */
+    user-select: none; /* убирать выделение текста */
+    background: rgb(212,75,56); /* фон кнопки */
+    padding: .7em 1.5em; /* отступ от текста */
+    outline: none; /* убирать контур в Mozilla */
+}
+
+
+.note{
+    display: inline-block;
+    margin-left: 7%;
+    font-size: 1em;
+}
+
+
+
+/* Панель статистики */
+.stats{
+   margin: auto;
+   width: 1000px;
+   height: 800px;
+   border: 1px solid black;
+
+}
+
+.stats_date{
+    width: 1000px;
+    height: 200px;
+    border: 1px solid black;
+    display: block;
+}
+
+.dates_left{
+    width: 400px;
+    display: inline-block;
+    padding-top: 3%;
+
+}
+
+.dates_right{
+    width: 400px;
+    display: inline-block;
+    padding-top: 3%;
+}
+
+.calen{
+    height: 30px;
+    width: 100px;
+
+}
+
+
+
+
+
+
+
+
+
+@import "https://fonts.googleapis.com/css?family=Rubik+Mono+One";
+body {
+  overflow-x: hidden;
+  font-family: 'Rubik Mono One', sans-serif;
+  padding: 30px;
+  text-align: center;
+}
+
+.kespatares {
+  color: white;
+  font-size: 0;
+  line-height: 1;
+}
+.kespatares span {
+  font-size: 30px;
+  display: inline-block;
+  -webkit-animation: move 2s ease-in-out ;
+          animation: move 2s ease-in-out ;
+}
+
+
+@-webkit-keyframes move {
+  0% {
+    -webkit-transform: translate(-33%, 0);
+            transform: translate(-33%, 0);
+  }
+  50% {
+    text-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  }
+  100% {
+    -webkit-transform: translate(33%, 0);
+            transform: translate(33%, 0);
+  }
+}
+
+@keyframes move {
+  0% {
+    -webkit-transform: translate(-33%, 0);
+            transform: translate(-33%, 0);
+  }
+  50% {
+    text-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  }
+  100% {
+    -webkit-transform: translate(33%, 0);
+            transform: translate(33%, 0);
+  }
+}
+* {
+  box-sizing: border-box;
+}
+
+
+
+
+
+
+
+
+
+
+

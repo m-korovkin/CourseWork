@@ -40,6 +40,7 @@ def deleteValuesFromTheTable(databaseName):
 	mycursor.execute(sql)
 
 	mydb.commit()
+	return True
 	#print(mycursor.rowcount, "record(s) deleted")
 
 

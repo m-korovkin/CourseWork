@@ -3,7 +3,7 @@ import sys
 import datetime
 
 from models import Request, Response
-import wsgi, config
+import wsgi, config, db
 
 
 class HTTPServer:
@@ -95,6 +95,13 @@ class HTTPServer:
                 return wsgi.handleLoginAdmin(request)
             elif 'POST' in str(request.method) and 'returnTicket' in str(path):
                 return wsgi.handleReturnTicket(request)
+            elif 'POST' in str(request.method) and 'adminTools' in str(path):
+                x = db.deleteValuesFromTheTable(request.body.split('=')[1])
+                if x:
+                    print(f'[{datetime.datetime.now()}] ')
+                else:
+                    print(f'[{datetime.datetime.now()}] [ERROR]')
+                return wsgi.handleBuyTicket(request)
             elif '.html' in str(path):
                 content_type = 'text/html; charset=uft-8'
             elif '.css' in str(path):

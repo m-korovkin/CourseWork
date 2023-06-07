@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Фирма</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main">
+        <div class="in-block">
+            <p><a href="admin.html">admin page</a></p>
+        </div>
+        <div class="in-block">
+            <p>12312312312312313131313131</p>
+        </div>
+        <div class="in-block">
+            <p>12312312312312313131313131</p>
+        </div>
+        <div class="in-block">
+            <p>12312312312312313131313131</p>
+        </div>
+        <div class="in-block">
+            <div class="map">
+                <span>
+                    <a class="custom-btn btn-2" href="map.html">Карта предприятий</a>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <form action="getTicketsList" method="get">
+            <div class="second">
+                <div class="route">
+                    <div>
+                        <div class="where_wrapper">
+                            <div class="where_block">
+                                <label class="where_label">Выберите маршрут:</label>
+                                <div class="block_box">
+                                    <select tabindex="1" class="box" name="route">
+                                        <option value="mn" selected>Москва - Нижний Новгород</option>
+                                        <option value="mp">Москва - Санкт-Петербург</option>
+                                        <option value="mi">Москва - Иваново</option>
+                                        <option value="mv">Москва - Воронеж</option>
+                                        <option value="mk">Москва - Кострома</option>
+
+                                        <option value="nm">Нижний Новгород - Москва</option>
+                                        <option value="mp">Нижний Новгород - Санкт-Петербург</option>
+                                        <option value="ni">Нижний Новгород - Иваново</option>
+                                        <option value="nv">Нижний Новгород - Воронеж</option>
+                                        <option value="nk">Нижний Новгород - Кострома</option>
+
+                                        <option value="pm">Санкт-Петербург - Москва</option>
+                                        <option value="pn">Санкт-Петербург - Нижний Новгород</option>
+                                        <option value="pi">Санкт-Петербург - Иваново</option>
+                                        <option value="pv">Санкт-Петербург - Воронеж</option>
+                                        <option value="pk">Санкт-Петербург - Кострома</option>
+
+                                        <option value="im">Иваново - Москва</option>
+                                        <option value="ip">Иваново - Санкт-Петербург</option>
+                                        <option value="in">Иваново - Нижний Новгород</option>
+                                        <option value="iv">Иваново - Воронеж</option>
+                                        <option value="ik">Иваново - Кострома</option>
+
+                                        <option value="vm">Воронеж - Москва</option>
+                                        <option value="vp">Воронеж - Санкт-Петербург</option>
+                                        <option value="vn">Воронеж - Нижний Новгород</option>
+                                        <option value="vi">Воронеж - Иваново</option>
+                                        <option value="vk">Воронеж - Кострома</option>
+
+                                        <option value="km">Кострома - Москва</option>
+                                        <option value="kp">Кострома - Санкт-Петербург</option>
+                                        <option value="kn">Кострома - Нижний Новгород</option>
+                                        <option value="ki">Кострома - Иваново</option>
+                                        <option value="kv">Кострома - Воронеж</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="data">
+                    <div class="data2">
+                        <form>
+                            <p class="calendar_p">Выберите дату:
+                            <input tabindex="2" class="calendar" type="date" name="calendar" value="01-06-2023" required max="05-06-2023" min="05-05-2023">
+                             </p>
+                        </form>
+                    </div>
+                </div>
+                <div class="passengers">
+                    <div class="passengers_2">
+                        <label  class="passengers_label">Пассажиры:</label>
+                        <div class="pass_block">
+                            <select tabindex="3" class="pass" name="quantity">
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="find">
+                    <button class="find_button" role="button" type="submit">
+                        <span>Найти билет</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <br><br><br><br>
+    <div class="ticket">
+        <div class="tick">
+           <div class="ticket_noprice">
+                <div class="trip">
+                    <label class="trip_label">Нижний Новгород - Москва</label>
+                </div>
+               <div class="inf">
+                   <label class="bus_num">Автобус номер 5</label>
+                   <label class="station_num">Вокзал номер 2</label>
+               </div>
+            </div>
+            <div class="sep"></div>
+            <div class="ticket_price">
+                <div class="price">
+                    <label class="label_price">2000р</label>
+                </div>
+                <div class="ticket_date">
+                    <label>24.06.2023</label>
+                </div>
+            </div>
+            <div class="sep"></div>
+            <div class="block_btn">
+                <form method="post" action="choosePlace">
+                    <input type="text" name="choosePlace" value="uniqID01" hidden>
+                    <button value="uniqID01" class="choose_btn" role="button" type="submit">
+                        <span>Выбрать билет</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <br><br><br><br>
+    <div class="ticket">
+        <div class="tick">
+           <div class="ticket_noprice">
+                <div class="trip">
+                    <label class="trip_label">Санкт-Петербург - Нижний Новгород</label>
+                </div>
+               <div class="inf">
+                   <label class="bus_num">Автобус номер 10</label>
+                   <label class="station_num">Вокзал номер 3</label>
+               </div>
+            </div>
+            <div class="sep"></div>
+            <div class="ticket_price">
+                <div class="price">
+                    <label class="label_price">2249р</label>
+                </div>
+                <div class="ticket_date">
+                    <label>12.06.2023</label>
+                </div>
+            </div>
+            <div class="sep"></div>
+            <div class="block_btn">
+                <form method="post" action="choosePlace">
+                    <input type="text" name="choosePlace" value="uniqID02" hidden>
+                    <button value="uniqID02" class="choose_btn" role="button" type="submit">
+                        <span>Выбрать билет</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <br><br><br><br>
+    <div class="ticket">
+        <div class="tick">
+           <div class="ticket_noprice">
+                <div class="trip">
+                    <label class="trip_label">Москва - Санкт-Петербург</label>
+                </div>
+               <div class="inf">
+                   <label class="bus_num">Автобус номер 3</label>
+                   <label class="station_num">Вокзал номер 1</label>
+               </div>
+            </div>
+            <div class="sep"></div>
+            <div class="ticket_price">
+                <div class="price">
+                    <label class="label_price">2400р</label>
+                </div>
+                <div class="ticket_date">
+                    <label>04.06.2023</label>
+                </div>
+            </div>
+            <div class="sep"></div>
+            <div class="block_btn">
+                <form method="post" action="choosePlace">
+                    <input type="text" name="choosePlace" value="uniqID03" hidden>
+                    <button value="uniqID03" class="choose_btn" role="button" type="submit">
+                        <span>Выбрать билет</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
